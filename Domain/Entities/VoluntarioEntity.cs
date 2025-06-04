@@ -8,6 +8,16 @@ namespace apo_ia.net.Domain.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string? id { get; set; }
+        public int? id { get; set; }
+        public string? alocacao { get; set; }
+        public string? capacidadeMotora { get; set; }
+
+        [Required]
+        [ForeignKey("abrigadoId")]
+        public AbrigadoEntity abrigado { get; set; }
+        public int? abrigadoId { get; set; }
+
+
+        public List<HabilidadeEntity> habilidades { get; set; } = new();
     }
 }
