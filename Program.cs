@@ -3,6 +3,7 @@ using apo_ia.net.Application.Services;
 using apo_ia.net.Domain.Interfaces;
 using apo_ia.net.Infraestructure.Data.AppData;
 using apo_ia.net.Infraestructure.Data.Repositories;
+using apo_ia.net.Infraestructure.Data.Seeders;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,6 +45,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// Executa o Seed após criar escopo de serviço
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ApplicationContext>();
+
+    context.Database.Migrate(); // Garante que o banco foi criado
+    DatabaseSeeder.Seed(context); // Executa a população
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
